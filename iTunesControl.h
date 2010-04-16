@@ -1,20 +1,21 @@
 //
-//  iTunesControl.h
+//  ITunesControl.h
 //  Lyrics in Sight
 //
 //  Created by Michel Steuwer on 16.04.10.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "iTunes.h"
+#import "ITunes.h"
+@class AppDelegate;
 
 
-@interface iTunesControl : NSObject {
-	IBOutlet NSTextView *textView;
+@interface ITunesControl : NSObject {
 	iTunesApplication *iTunes;
+	AppDelegate *controller;
 }
 
--(id) init;
+-(id) initWithController:(AppDelegate *)aController;
 
 -(void) songChanged:(NSNotification *) aNotification;
 
