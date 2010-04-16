@@ -64,11 +64,15 @@
 - (void)editModeStarted
 {
 	[[self window] setMovable:YES];
+	// add closeable and resizable to the mask
+	[[self window] setStyleMask:[[self window] styleMask] | NSClosableWindowMask | NSResizableWindowMask];
 }
 
 - (void)editModeStoped
 {
 	[[self window] setMovable:NO];
+	// remove closeable and resizable from the mask
+	[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask];
 }
 
 @end

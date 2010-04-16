@@ -89,6 +89,7 @@
 			[[panelController objectAtIndex:i] editModeStarted];
 		}
 	}
+	inEditMode = ~inEditMode;
 }
 
 - (NSDictionary *)getSongInfo
