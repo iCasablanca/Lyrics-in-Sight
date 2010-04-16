@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Lyrics in Sight' target in the 'Lyrics in Sight' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
