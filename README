@@ -1,0 +1,6 @@
+Project to show information about the current playing song in iTunes.
+This project is OS X only because it is written in Objective-C and using the Cocoa framework by Apple.
+
+To Build install the Developer Tools by Apple and open the project in XCode.
+Click Build.
+Done.
