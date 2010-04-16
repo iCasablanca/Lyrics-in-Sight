@@ -6,14 +6,19 @@
 //
 
 #import <Cocoa/Cocoa.h>
-
+@class AppDelegate;
 
 @interface PanelController : NSWindowController {
+	AppDelegate *controller;
 	IBOutlet NSTextView *textView;
 }
 
-- (void)clear;
+- (id)initWithController:(AppDelegate *)aController;
 
+- (void)clear;
 - (void)update:(NSDictionary *)songInfo;
+
+- (void)editModeStarted;
+- (void)editModeStoped;
 
 @end

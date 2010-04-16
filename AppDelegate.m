@@ -10,17 +10,19 @@
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
+	inEditMode = FALSE;
 	[self createMenu];
 	[self loadPanels];
-	iTC = [[ITunesControl alloc] initWithController:self];
-	PanelController *controller = [[PanelController alloc] init];
+	iTC = [[iTunesControl alloc] initWithController:self];
+	
+	PanelController *controller = [[PanelController alloc] initWithController:self];
 	[controller showWindow:self];
 	[panelController addObject:controller];
 	
-	//[window setLevel:kCGDesktopIconWindowLevel]; // TODO: remove to earlier time
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:iTC
 																											selector:@selector(songChanged:)
-																													name:@"com.apple.iTunes.playerInfo" object:nil];
+																													name:@"com.apple.iTunes.playerInfo"
+																												object:nil];
 }
 
 - (void)createMenu
@@ -36,12 +38,12 @@
 	[statusItem setToolTip:@""];
 	
 	theMenu = [[NSMenu alloc] initWithTitle:@""];	
-	NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
-																								action:@selector(addPanel:)
-																				 keyEquivalent:@""];
-	[item setTarget:self];
-	[theMenu addItem:item];
-	
+	[theMenu addItemWithTitle:@"Add Panel" 
+										 action:@selector(addPanel:) 
+							keyEquivalent:@""];
+	[theMenu addItemWithTitle:@"Edit Panels"
+										 action:@selector(switchEditMode:)
+							keyEquivalent:@""];
 	[theMenu addItemWithTitle:@"Quit Lyrics in Sight"
 										 action:@selector(terminate:)
 							keyEquivalent:@""];
@@ -71,11 +73,27 @@
 
 - (void)updatePanels:(NSDictionary *)songInfo
 {
-	NSLog(@"updatePanels called");
-	NSLog(@"%d", [panelController count]);
 	for	(int i = 0; i < [panelController count]; i++) {
 		[[panelController objectAtIndex:i] update:songInfo];
 	}
+}
+
+- (void)switchEditMode:(id)sender
+{
+	if (inEditMode) {
+		for (int i = 0; i < [panelController count]; i++) {
+			[[panelController objectAtIndex:i] editModeStoped];
+		}
+	} else {
+		for (int i = 0; i < [panelController count]; i++) {
+			[[panelController objectAtIndex:i] editModeStarted];
+		}
+	}
+}
+
+- (NSDictionary *)getSongInfo
+{
+	return [iTC getSongInfo];
 }
 
 @end

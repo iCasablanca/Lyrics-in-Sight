@@ -7,13 +7,13 @@
 
 #import <Cocoa/Cocoa.h>
 #import "PanelController.h"
-#import "ITunesControl.h"
+#import "iTunesControl.h"
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
-	ITunesControl *iTC;
-	
+	iTunesControl *iTC;
 	NSMutableArray *panelController;
+	BOOL inEditMode;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
@@ -22,6 +22,8 @@
 - (void)addPanel:(id)sender;
 - (void)clearPanels;
 - (void)updatePanels:(NSDictionary *)songInfo;
+- (void)switchEditMode:(id)sender;
 
+- (NSDictionary *)getSongInfo;
 
 @end

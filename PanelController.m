@@ -6,14 +6,17 @@
 //
 
 #import "PanelController.h"
+#import "AppDelegate.h"
 
 
 @implementation PanelController
 
-- (id)init
+- (id)initWithController:(AppDelegate *)aController
 {
 	if (![super initWithWindowNibName:@"Panel"])
 		return nil;
+	controller = aController;
+	[[self window] setMovable:NO];
 	return self;
 }
 
@@ -25,6 +28,7 @@
 - (void)windowDidLoad
 {
 	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	[self update:[controller getSongInfo]];
 }
 
 - (void)clear
@@ -33,7 +37,7 @@
 }
 
 - (void)update:(NSDictionary *)songInfo
-{
+{	
 	NSString *artist	= [songInfo objectForKey:@"Artist"];
 	artist =  (artist == nil) ? @"" : artist;
 	NSString *album		= [songInfo objectForKey:@"Album"];
@@ -55,6 +59,16 @@
 	[output appendString:lyrics];
 	
 	[textView setString:output];
+}
+
+- (void)editModeStarted
+{
+	[[self window] setMovable:YES];
+}
+
+- (void)editModeStoped
+{
+	[[self window] setMovable:NO];
 }
 
 @end

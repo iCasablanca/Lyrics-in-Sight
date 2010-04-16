@@ -5,10 +5,10 @@
 //  Created by Michel Steuwer on 16.04.10.
 //
 
-#import "ITunesControl.h"
+#import "iTunesControl.h"
 #import "AppDelegate.h"
 
-@implementation ITunesControl
+@implementation iTunesControl
 
 -(id) initWithController:(AppDelegate *)aController
 {
@@ -16,6 +16,31 @@
 		return nil;
 	iTunes = [SBApplication applicationWithBundleIdentifier:@"com.apple.iTunes"];
 	controller = aController;
+	
+	if ([iTunes isRunning]) { // fill dictionary with AppleScript
+		songInfo = [NSMutableDictionary dictionary];
+		
+		iTunesTrack *currentTrack = [iTunes currentTrack];
+		
+		NSString *artist = [currentTrack artist];
+		artist = (artist == nil) ? @"" : artist;
+		[songInfo setObject:artist forKey:@"Artist"];
+		
+		NSString *album = [currentTrack album];
+		album = (album == nil) ? @"" : album;
+		[songInfo setObject:album forKey:@"Album"];
+		
+		NSString *title = [currentTrack name];
+		title = (title == nil) ? @"" : title;
+		[songInfo setObject:title forKey:@"Name"];
+		
+		NSString *lyrics	= [currentTrack lyrics];
+		lyrics = (lyrics == nil) ? @"" : lyrics;
+		[songInfo setObject:lyrics forKey:@"Lyrics"];
+		
+		[controller updatePanels:songInfo];
+	}
+	
 	return self;
 }
 
@@ -25,38 +50,23 @@
 	NSLog(@"%@", userInfo);
 	NSString *playerState = [userInfo objectForKey:@"Player State"];
 	if ( [playerState isEqualToString:@"Stopped"] ) {
-		// TODO: cleanup
-		[controller clearPanels]; 
-		//[textView setString:@""];
+		[controller clearPanels];
 		return;
 	} else {
+		// need to load lyrics extra (because not included in notification)
 		NSString *lyrics	= [[iTunes currentTrack] lyrics];
 		lyrics = (lyrics == nil) ? @"" : lyrics;
-		NSMutableDictionary *songInfo = [userInfo mutableCopy];
-		[songInfo setObject:lyrics forKey:@"Lyrics"];
+		
+		songInfo = nil; // clear Dictionary
+		songInfo = [userInfo mutableCopy];
+		[songInfo setObject:lyrics forKey:@"Lyrics"]; // add lyrics
 		[controller updatePanels:songInfo];
-//		NSString *artist	= [userInfo objectForKey:@"Artist"];
-//		artist =  (artist == nil) ? @"" : artist;
-//		NSString *album		= [userInfo objectForKey:@"Album"];
-//		album = (album == nil) ? @"" : album;
-//		NSString *title		= [userInfo objectForKey:@"Name"];
-//		title = (title == nil) ? @"" : title;
-//		NSString *lyrics	= [[iTunes currentTrack] lyrics];
-//		lyrics = (lyrics == nil) ? @"" : lyrics;
-//		// TODO: get and set lyrics:
-//		// [[iTunes currentTrack] setLyrics:album];
-//		
-//		NSMutableString *output = [[NSMutableString alloc] init];
-//		[output appendString:title];
-//		[output appendString:@" / "];
-//		[output appendString:artist];
-//		[output appendString:@" / "];
-//		[output appendString:album];
-//		[output appendString:@"\n\n"];
-//		[output appendString:lyrics];
-//		
-//		[textView setString:output];
 	}
+}
+
+-(NSDictionary *)getSongInfo
+{
+	return songInfo;
 }
 
 @end
