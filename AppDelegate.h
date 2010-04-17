@@ -16,6 +16,7 @@ typedef enum {
 } MenuItems;
 
 extern NSString * const LiSPanelCount;
+extern NSString * const LiSPanelDefaults;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
@@ -36,6 +37,7 @@ extern NSString * const LiSPanelCount;
 - (void)registeringUserDefaults;
 - (void)creatingPanels;
 - (NSInteger)panelCount;
+- (PanelController *)panelAtIndex:(NSInteger)i;
 
 - (NSDictionary *)getSongInfo;
 

@@ -10,6 +10,7 @@
 @implementation AppDelegate
 
 NSString * const LiSPanelCount = @"PanelCount";
+NSString * const LiSPanelDefaults = @"PanelDefaults";
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
 	[self createMenu];
@@ -66,6 +67,11 @@ NSString * const LiSPanelCount = @"PanelCount";
 	[defaultValues setObject:[NSNumber numberWithInt:1]
 										forKey:LiSPanelCount];
 	
+	PanelController *panel = [[PanelController alloc] init];
+	
+	[defaultValues setObject:[NSArray arrayWithObject:panel]
+										forKey:LiSPanelDefaults];
+	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
 }
 
@@ -74,7 +80,9 @@ NSString * const LiSPanelCount = @"PanelCount";
 	panelController = [NSMutableArray arrayWithCapacity:[self panelCount]];
 	
 	for (int i = 0; i < [self panelCount]; i++) {
-		PanelController *controller = [[PanelController alloc] initWithController:self];
+//		PanelController *controller = [[PanelController alloc] init];
+		PanelController *controller = [self panelAtIndex:i];
+		[controller setController:self];
 		[controller showWindow:self];
 		[panelController addObject:controller];
 	}
@@ -89,6 +97,12 @@ NSString * const LiSPanelCount = @"PanelCount";
 {
 	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:newCount]
 																						forKey:LiSPanelCount];
+}
+
+- (PanelController *)panelAtIndex:(NSInteger)i
+{
+	NSArray *array = [[NSUserDefaults standardUserDefaults] objectForKey:LiSPanelDefaults];
+	return [array objectAtIndex:i];
 }
 
 - (void)addPanel:(id)sender

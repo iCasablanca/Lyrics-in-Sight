@@ -11,12 +11,54 @@
 
 @implementation PanelController
 
-- (id)initWithController:(AppDelegate *)aController
+- (id)init
 {
 	if (![super initWithWindowNibName:@"Panel"])
 		return nil;
+	controller = nil;
+	rect = NSMakeRect(500, 500, 500, 300); // Defaults
+	
+	
+	return self;
+}
+
+- (id)initWithController:(AppDelegate *)aController
+{
+	self = [self init];
 	controller = aController;
 	return self;
+}
+
+// NSCoding
+
+- (id)initWithCoder:(NSCoder *)decoder
+{
+	NSLog(@"initWithCoder");
+	self = [self init];
+	rect = [decoder decodeRectForKey:@"Rect"];
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)encoder
+{
+	NSLog(@"encodeWithCoder");
+	[super encodeWithCoder:encoder];
+	[encoder encodeRect:rect forKey:@"Rect"];
+}
+
+- (void)setController:(AppDelegate *)aController
+{
+	controller = aController;
+}
+
+- (void)windowDidMove:(NSNotification *)windowDidMoveNotification
+{
+	rect = [[windowDidMoveNotification object] frame];
+}
+
+- (void)windowDidResize:(NSNotification *)windowDidResizeNotification
+{
+	rect = [[windowDidResizeNotification object] frame];
 }
 
 - (void)windowWillLoad
@@ -27,8 +69,10 @@
 - (void)windowDidLoad
 {
 	[[self window] setMovable:NO];
-//	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	[[self window] setFrame:rect display:NO];
 	[self update:[controller getSongInfo]];
+	[[self window] display];
 }
 
 - (void)clear
@@ -80,5 +124,6 @@
 	[textView setSelectable:NO];
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
 }
+
 
 @end
