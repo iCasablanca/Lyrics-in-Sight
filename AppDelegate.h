@@ -9,6 +9,12 @@
 #import "PanelController.h"
 #import "iTunesControl.h"
 
+typedef enum {
+	QUIT_LYRICS_IN_SIGHT_MENU_ITEM = 0,
+	EDIT_MODE_MENU_ITEM = 1,
+	ADD_PANEL_MENU_ITEM = 2
+} MenuItems;
+
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
 	iTunesControl *iTC;

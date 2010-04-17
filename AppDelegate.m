@@ -23,6 +23,15 @@
 																											selector:@selector(songChanged:)
 																													name:@"com.apple.iTunes.playerInfo"
 																												object:nil];
+	[[NSDistributedNotificationCenter defaultCenter] addObserver:self
+																											selector:@selector(notification:)
+																													name:nil
+																												object:nil];
+}
+
+- (void)notification:(NSNotification *) aNotification
+{
+	NSLog(@"%@", aNotification);
 }
 
 - (void)createMenu
@@ -38,15 +47,23 @@
 	[statusItem setToolTip:@""];
 	
 	theMenu = [[NSMenu alloc] initWithTitle:@""];	
-	[theMenu addItemWithTitle:@"Add Panel" 
-										 action:@selector(addPanel:) 
-							keyEquivalent:@""];
-	[theMenu addItemWithTitle:@"Edit Panels"
-										 action:@selector(switchEditMode:)
-							keyEquivalent:@""];
-	[theMenu addItemWithTitle:@"Quit Lyrics in Sight"
-										 action:@selector(terminate:)
-							keyEquivalent:@""];
+	NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
+																								action:@selector(addPanel:)
+																				 keyEquivalent:@""];
+	[item setTag:ADD_PANEL_MENU_ITEM];
+	[theMenu addItem:item];
+	
+	item = [[NSMenuItem alloc] initWithTitle:@"Edit Panels"
+																		action:@selector(switchEditMode:)
+														 keyEquivalent:@""];
+	[item setTag:EDIT_MODE_MENU_ITEM];
+	[theMenu addItem:item];
+	
+	item = [[NSMenuItem alloc] initWithTitle:@"Quit Lyrics in Sight"
+																		action:@selector(terminate:)
+														 keyEquivalent:@""];
+	[item setTag:QUIT_LYRICS_IN_SIGHT_MENU_ITEM];
+	[theMenu addItem:item];
 	
 	[statusItem setMenu:theMenu];
 }
@@ -80,14 +97,16 @@
 
 - (void)switchEditMode:(id)sender
 {
-	if (inEditMode) {
+	if (inEditMode) { // switch to normal mode
 		for (int i = 0; i < [panelController count]; i++) {
 			[[panelController objectAtIndex:i] editModeStoped];
 		}
-	} else {
+		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
+	} else { // switch to edit mode
 		for (int i = 0; i < [panelController count]; i++) {
 			[[panelController objectAtIndex:i] editModeStarted];
 		}
+		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOnState];
 	}
 	inEditMode = ~inEditMode;
 }
