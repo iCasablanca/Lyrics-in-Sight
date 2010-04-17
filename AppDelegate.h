@@ -15,20 +15,27 @@ typedef enum {
 	ADD_PANEL_MENU_ITEM = 2
 } MenuItems;
 
+extern NSString * const LiSPanelCount;
+
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	NSStatusItem *statusItem;
+	
 	iTunesControl *iTC;
+	
 	NSMutableArray *panelController;
+	
 	BOOL inEditMode;
 }
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification;
 - (void)createMenu;
-- (void)loadPanels;
 - (void)addPanel:(id)sender;
 - (void)clearPanels;
 - (void)updatePanels:(NSDictionary *)songInfo;
 - (void)switchEditMode:(id)sender;
+- (void)registeringUserDefaults;
+- (void)creatingPanels;
+- (NSInteger)panelCount;
 
 - (NSDictionary *)getSongInfo;
 

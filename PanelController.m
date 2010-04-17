@@ -16,7 +16,6 @@
 	if (![super initWithWindowNibName:@"Panel"])
 		return nil;
 	controller = aController;
-	[[self window] setMovable:NO];
 	return self;
 }
 
@@ -27,7 +26,8 @@
 
 - (void)windowDidLoad
 {
-	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	[[self window] setMovable:NO];
+//	[[self window] setLevel:kCGDesktopIconWindowLevel];
 	[self update:[controller getSongInfo]];
 }
 
@@ -78,6 +78,7 @@
 	[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask];
 	[textView setEditable:NO];
 	[textView setSelectable:NO];
+	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
 }
 
 @end

@@ -9,29 +9,19 @@
 
 @implementation AppDelegate
 
+NSString * const LiSPanelCount = @"PanelCount";
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-	inEditMode = FALSE;
 	[self createMenu];
-	[self loadPanels];
+	[self registeringUserDefaults];
+	inEditMode = FALSE;
+	
 	iTC = [[iTunesControl alloc] initWithController:self];
-	
-	PanelController *controller = [[PanelController alloc] initWithController:self];
-	[controller showWindow:self];
-	[panelController addObject:controller];
-	
 	[[NSDistributedNotificationCenter defaultCenter] addObserver:iTC
 																											selector:@selector(songChanged:)
 																													name:@"com.apple.iTunes.playerInfo"
 																												object:nil];
-	[[NSDistributedNotificationCenter defaultCenter] addObserver:self
-																											selector:@selector(notification:)
-																													name:nil
-																												object:nil];
-}
-
-- (void)notification:(NSNotification *) aNotification
-{
-	NSLog(@"%@", aNotification);
+	[self creatingPanels];
 }
 
 - (void)createMenu
@@ -68,17 +58,46 @@
 	[statusItem setMenu:theMenu];
 }
 
-- (void)loadPanels
+- (void)registeringUserDefaults
 {
-	// TODO: load Panels from user defaults
-	panelController = [NSMutableArray array];
+	// inititalize default user defaults
+	NSMutableDictionary *defaultValues = [NSMutableDictionary dictionary];
+	
+	[defaultValues setObject:[NSNumber numberWithInt:1]
+										forKey:LiSPanelCount];
+	
+	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
+}
+
+- (void)creatingPanels
+{
+	panelController = [NSMutableArray arrayWithCapacity:[self panelCount]];
+	
+	for (int i = 0; i < [self panelCount]; i++) {
+		PanelController *controller = [[PanelController alloc] initWithController:self];
+		[controller showWindow:self];
+		[panelController addObject:controller];
+	}
+}
+
+- (NSInteger)panelCount
+{
+	return [[NSUserDefaults standardUserDefaults] integerForKey:LiSPanelCount];
+}
+
+- (void)setPanelCount:(NSInteger)newCount
+{
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:newCount]
+																						forKey:LiSPanelCount];
 }
 
 - (void)addPanel:(id)sender
 {
-	PanelController *controller = [[PanelController alloc] init];
+	PanelController *controller = [[PanelController alloc] initWithController:self];
 	[controller showWindow:self];
 	[panelController addObject:controller];
+	
+	[self setPanelCount:[self panelCount] + 1];
 }
 
 - (void)clearPanels
