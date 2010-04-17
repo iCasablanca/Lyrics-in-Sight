@@ -7,6 +7,7 @@
 
 #import "iTunesControl.h"
 #import "AppDelegate.h"
+#import "LyricsFinder.h"
 
 @implementation iTunesControl
 
@@ -56,6 +57,15 @@
 		// need to load lyrics extra (because not included in notification)
 		NSString *lyrics	= [[iTunes currentTrack] lyrics];
 		lyrics = (lyrics == nil) ? @"" : lyrics;
+		
+		if ([lyrics isEqualToString: @""]) { // find lyrics, if lyrics are not set
+			lyrics = [LyricsFinder findLyricsOf:[userInfo objectForKey:@"Name"]
+																			 by:[userInfo objectForKey:@"Artist"]];
+			// uncomment the following line to automatically set lyric of song, if found
+//			if (![lyrics isEqualToString:@""]) { // set lyrics of song via iTunes 
+//				[[iTunes currentTrack] setLyrics:lyrics];
+//			}
+		} 
 		
 		songInfo = nil; // clear Dictionary
 		songInfo = [userInfo mutableCopy];
