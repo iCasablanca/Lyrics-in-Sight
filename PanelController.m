@@ -6,15 +6,17 @@
 //
 
 #import "PanelController.h"
-#import "AppDelegate.h"
+#import "AppController.h"
 
 
 @implementation PanelController
 
+#pragma mark initialize and set up methods
 - (id)init
 {
 	if (![super initWithWindowNibName:@"Panel"])
 		return nil;
+	[self setShouldCascadeWindows:NO];
 	controller = nil;
 	rect = NSMakeRect(500, 500, 500, 300); // Defaults
 	
@@ -22,59 +24,20 @@
 	return self;
 }
 
-- (id)initWithController:(AppDelegate *)aController
+- (id)initWithController:(AppController *)aController
 {
-	self = [self init];
+	if (![self init])
+		return nil;
 	controller = aController;
 	return self;
 }
 
-// NSCoding
-
-- (id)initWithCoder:(NSCoder *)decoder
-{
-	NSLog(@"initWithCoder");
-	self = [self init];
-	rect = [decoder decodeRectForKey:@"Rect"];
-	return self;
-}
-
-- (void)encodeWithCoder:(NSCoder *)encoder
-{
-	NSLog(@"encodeWithCoder");
-	[super encodeWithCoder:encoder];
-	[encoder encodeRect:rect forKey:@"Rect"];
-}
-
-- (void)setController:(AppDelegate *)aController
+- (void)setController:(AppController *)aController
 {
 	controller = aController;
 }
 
-- (void)windowDidMove:(NSNotification *)windowDidMoveNotification
-{
-	rect = [[windowDidMoveNotification object] frame];
-}
-
-- (void)windowDidResize:(NSNotification *)windowDidResizeNotification
-{
-	rect = [[windowDidResizeNotification object] frame];
-}
-
-- (void)windowWillLoad
-{
-	
-}
-
-- (void)windowDidLoad
-{
-	[[self window] setMovable:NO];
-	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
-	[[self window] setFrame:rect display:NO];
-	[self update:[controller getSongInfo]];
-	[[self window] display];
-}
-
+#pragma mark  panel content management methods
 - (void)clear
 {
 	[textView setString:@""];
@@ -90,9 +53,7 @@
 	title = (title == nil) ? @"" : title;
 	NSString *lyrics	= [songInfo objectForKey:@"Lyrics"];
 	lyrics = (lyrics == nil) ? @"" : lyrics;
-	// TODO: get and set lyrics:
-	// [[iTunes currentTrack] setLyrics:album];
-
+	
 	NSMutableString *output = [[NSMutableString alloc] init];
 	[output appendString:title];
 	[output appendString:@" / "];
@@ -105,6 +66,7 @@
 	[textView setString:output];
 }
 
+#pragma mark  edit mode management methods
 - (void)editModeStarted
 {
 	[[self window] setMovable:YES];
@@ -125,5 +87,62 @@
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
 }
 
+#pragma mark  converting the content stored in NSUserDefualts to and from a dictionary
+- (id)initWithDictionary:(NSDictionary *)aDictionary
+{
+	if (![self init])
+		return nil;
+	rect.origin.x			= [[aDictionary objectForKey:@"X"] floatValue];
+	rect.origin.y			= [[aDictionary objectForKey:@"Y"] floatValue];
+	rect.size.width		= [[aDictionary objectForKey:@"Width"] floatValue];
+	rect.size.height	= [[aDictionary objectForKey:@"Height"] floatValue];
+	return self;
+}
+
+- (NSDictionary *)dictionary
+{
+	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.x] forKey:@"X"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.y] forKey:@"Y"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.size.width] forKey:@"Width"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.size.height] forKey:@"Height"];
+	return dictionary;
+}
+
+#pragma mark NSWindowController methods
+-(void)windowDidLoad
+{
+	NSLog(@"panel: %@", self);
+	NSLog(@"Rect: %f, %f", rect.origin.x, rect.origin.y);
+	NSRect frame = [[self window] frame];
+	NSLog(@"Frame: %f, %f", frame.origin.x, frame.origin.y);
+	[[self window] setMovable:NO];
+	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	[[self window] setFrame:rect display:YES animate:YES];
+	if (controller != nil) {
+		[self update:[controller getSongInfo]];
+	}
+	
+	frame = [[self window] frame];
+	NSLog(@"Frame: %f, %f", frame.origin.x, frame.origin.y);
+	
+	[[self window] display];
+}
+
+- (void)windowDidMove:(NSNotification *)windowDidMoveNotification
+{
+	rect = [[windowDidMoveNotification object] frame];
+	NSLog(@"%f, %f", rect.origin.x, rect.origin.y);
+}
+
+- (void)windowDidResize:(NSNotification *)windowDidResizeNotification
+{
+	rect = [[windowDidResizeNotification object] frame];
+}
+
+- (NSString *)description
+{
+	return [NSString stringWithFormat:@"%f, %f: %f, %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height];
+}
 
 @end

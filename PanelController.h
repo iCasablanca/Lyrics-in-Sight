@@ -6,26 +6,36 @@
 //
 
 #import <Cocoa/Cocoa.h>
-@class AppDelegate;
+@class AppController;
 
-@interface PanelController : NSWindowController <NSCoding> {
-	AppDelegate *controller;
+@interface PanelController : NSWindowController {
+	AppController *controller;
 	IBOutlet NSTextView *textView;
 	
+	// data to be stored in NSUserDefaults see: encodeWithCoder / initWithCoder
 	NSRect rect;
 }
 
+// initialize and set up methods
 - (id)init;
-- (id)initWithController:(AppDelegate *)aController;
-- (void)setController:(AppDelegate *)aController;
+- (id)initWithController:(AppController *)aController;
+- (void)setController:(AppController *)aController;
 
+// panel content management methods
 - (void)clear;
 - (void)update:(NSDictionary *)songInfo;
 
+// edit mode management methods
 - (void)editModeStarted;
 - (void)editModeStoped;
 
-- (void)encodeWithCoder:(NSCoder *)encoder;
-- (id)initWithCoder:(NSCoder *)decoder;
+// converting the content stored in NSUserDefualts to and from a dictionary
+- (id)initWithDictionary:(NSDictionary *)aDictionary;
+- (NSDictionary *)dictionary;
+
+// NSWindowController methods
+- (void)windowDidLoad;
+- (void)windowDidMove:(NSNotification *)windowDidMoveNotification;
+- (void)windowDidResize:(NSNotification *)windowDidResizeNotification;
 
 @end

@@ -7,16 +7,16 @@
 
 #import <Cocoa/Cocoa.h>
 #import "iTunes.h"
-@class AppDelegate;
+@class AppController;
 
 
 @interface iTunesControl : NSObject {
 	iTunesApplication *iTunes;
-	AppDelegate *controller;
+	AppController *controller;
 	NSMutableDictionary *songInfo; // to cash song infos
 }
 
--(id) initWithController:(AppDelegate *)aController;
+-(id) initWithController:(AppController *)aController;
 -(void) songChanged:(NSNotification *) aNotification;
 -(NSDictionary *)getSongInfo;
 
