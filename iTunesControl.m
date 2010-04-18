@@ -6,12 +6,12 @@
 //
 
 #import "iTunesControl.h"
-#import "AppDelegate.h"
+#import "AppController.h"
 #import "LyricsFinder.h"
 
 @implementation iTunesControl
 
--(id) initWithController:(AppDelegate *)aController
+-(id) initWithController:(AppController *)aController
 {
 	if (![super init])
 		return nil;
