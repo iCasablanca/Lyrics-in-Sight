@@ -127,13 +127,13 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 - (void)switchEditMode:(id)sender
 {
 	if (inEditMode) { // switch to normal mode
-		for (int i = 0; i < [panelControllers count]; i++) {
-			[[panelControllers objectAtIndex:i] editModeStopped];
+		for (PanelController *controller in panelControllers) {
+			[controller editModeStopped];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
 	} else { // switch to edit mode
-		for (int i = 0; i < [panelControllers count]; i++) {
-			[[panelControllers objectAtIndex:i] editModeStarted];
+		for (PanelController *controller in panelControllers) {
+			[controller editModeStarted];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOnState];
 	}
@@ -148,6 +148,12 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 	[panelControllers addObject:controller];
 	
 	[controller showWindow:self];
+	
+	if (!inEditMode) { // switch to edit mode after adding panel
+		[self switchEditMode:self];
+	} else {
+		[controller editModeStarted]; // if in edit mode, set added panel also to edit mode
+	}
 	
 	// save change to user defaults
 	[self saveUserDefaults];
@@ -164,15 +170,15 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 #pragma mark panel content management
 - (void)clearPanels
 {
-	for (int i = 0; i < [panelControllers count]; i++) {
-		[[panelControllers objectAtIndex:i] clear];
+	for (PanelController *controller in panelControllers) {
+		[controller clear];
 	}
 }
 
-- (void)updatePanels:(NSDictionary *)songInfo
+- (void)updatePanels:(NSDictionary *)userInfo
 {
-	for	(int i = 0; i < [panelControllers count]; i++) {
-		[[panelControllers objectAtIndex:i] update:songInfo];
+	for	(PanelController *controller in panelControllers) {
+		[controller update:userInfo];
 	}
 }
 

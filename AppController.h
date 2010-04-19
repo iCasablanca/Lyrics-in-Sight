@@ -48,7 +48,7 @@ extern NSString * const LiSPanelControllers;
 
 // panel content management
 - (void)clearPanels;
-- (void)updatePanels:(NSDictionary *)songInfo;
+- (void)updatePanels:(NSDictionary *)userInfo;
 - (NSDictionary *)getSongInfo;
 
 @end
