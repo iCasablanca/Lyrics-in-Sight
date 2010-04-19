@@ -125,7 +125,7 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 {
 	if (inEditMode) { // switch to normal mode
 		for (int i = 0; i < [panelController count]; i++) {
-			[[panelController objectAtIndex:i] editModeStoped];
+			[[panelController objectAtIndex:i] editModeStopped];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
 	} else { // switch to edit mode

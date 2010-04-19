@@ -71,17 +71,17 @@
 {
 	[[self window] setMovable:YES];
 	// add closeable and resizable to the mask
-	[[self window] setStyleMask:[[self window] styleMask] | NSClosableWindowMask | NSResizableWindowMask];
+	[[self window] setStyleMask:[[self window] styleMask] | NSClosableWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSUtilityWindowMask];
 	// make text editable and selectable
 	[textView setEditable:YES];
 	[textView setSelectable:YES];
 }
 
-- (void)editModeStoped
+- (void)editModeStopped
 {
 	[[self window] setMovable:NO];
 	// remove closeable and resizable from the mask
-	[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask];
+	[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask & ~NSTitledWindowMask & ~NSUtilityWindowMask];
 	[textView setEditable:NO];
 	[textView setSelectable:NO];
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
@@ -112,13 +112,13 @@
 #pragma mark NSWindowController methods
 -(void)windowDidLoad
 {
-	NSLog(@"panel: %@", self);
-	NSLog(@"Rect: %f, %f", rect.origin.x, rect.origin.y);
 	NSRect frame = [[self window] frame];
-	NSLog(@"Frame: %f, %f", frame.origin.x, frame.origin.y);
 	[[self window] setMovable:NO];
 	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
 	[[self window] setFrame:rect display:YES animate:YES];
+	
+	[self editModeStopped];
+	
 	if (controller != nil) {
 		[self update:[controller getSongInfo]];
 	}

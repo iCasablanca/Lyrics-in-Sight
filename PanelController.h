@@ -27,7 +27,7 @@
 
 // edit mode management methods
 - (void)editModeStarted;
-- (void)editModeStoped;
+- (void)editModeStopped;
 
 // converting the content stored in NSUserDefualts to and from a dictionary
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
