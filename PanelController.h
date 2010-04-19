@@ -14,6 +14,7 @@
 	
 	// data to be stored in NSUserDefaults see: encodeWithCoder / initWithCoder
 	NSRect rect;
+	NSString *type;
 }
 
 // initialize and set up methods

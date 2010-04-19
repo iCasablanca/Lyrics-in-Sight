@@ -8,6 +8,7 @@
 #import <Cocoa/Cocoa.h>
 #import "iTunesControl.h"
 #import "PanelController.h"
+#import "ControllerFactory.h"
 
 typedef enum {
 	QUIT_LYRICS_IN_SIGHT_MENU_ITEM = 0,

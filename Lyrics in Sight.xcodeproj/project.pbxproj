@@ -13,6 +13,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E641A211179ED4E00F2A306 /* LyricsFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E641A201179ED4E00F2A306 /* LyricsFinder.m */; };
+		D06294A0117C6BE200255BF8 /* ControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = D062949F117C6BE200255BF8 /* ControllerFactory.m */; };
 		D06516E61178DBBC004BE15B /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06516E51178DBBC004BE15B /* PanelController.m */; };
 		D06517341178E0AE004BE15B /* Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = D06517331178E0AE004BE15B /* Panel.xib */; };
 		D0763604117AF4D600A0899A /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0763603117AF4D600A0899A /* AppController.m */; };
@@ -36,6 +37,8 @@
 		8D1107320486CEB800E47090 /* Lyrics in Sight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyrics in Sight.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsFinder.h; sourceTree = "<group>"; };
 		9E641A201179ED4E00F2A306 /* LyricsFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsFinder.m; sourceTree = "<group>"; };
+		D062949E117C6BE200255BF8 /* ControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerFactory.h; sourceTree = "<group>"; };
+		D062949F117C6BE200255BF8 /* ControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControllerFactory.m; sourceTree = "<group>"; };
 		D06516E41178DBBC004BE15B /* PanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
 		D06516E51178DBBC004BE15B /* PanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
 		D06517331178E0AE004BE15B /* Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Panel.xib; sourceTree = "<group>"; };
@@ -64,16 +67,15 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D062949D117C6BAF00255BF8 /* iTunes */,
 				256AC3D80F4B6AC300CF3369 /* AppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* AppDelegate.m */,
 				D0763602117AF4D600A0899A /* AppController.h */,
 				D0763603117AF4D600A0899A /* AppController.m */,
 				D06516E41178DBBC004BE15B /* PanelController.h */,
 				D06516E51178DBBC004BE15B /* PanelController.m */,
-				D09B80E31178944900539C51 /* iTunesControl.h */,
-				D09B80E41178944900539C51 /* iTunesControl.m */,
-				9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */,
-				9E641A201179ED4E00F2A306 /* LyricsFinder.m */,
+				D062949E117C6BE200255BF8 /* ControllerFactory.h */,
+				D062949F117C6BE200255BF8 /* ControllerFactory.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -148,6 +150,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		D062949D117C6BAF00255BF8 /* iTunes */ = {
+			isa = PBXGroup;
+			children = (
+				D09B80E31178944900539C51 /* iTunesControl.h */,
+				D09B80E41178944900539C51 /* iTunesControl.m */,
+				9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */,
+				9E641A201179ED4E00F2A306 /* LyricsFinder.m */,
+			);
+			name = iTunes;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -211,6 +224,7 @@
 				D06516E61178DBBC004BE15B /* PanelController.m in Sources */,
 				9E641A211179ED4E00F2A306 /* LyricsFinder.m in Sources */,
 				D0763604117AF4D600A0899A /* AppController.m in Sources */,
+				D06294A0117C6BE200255BF8 /* ControllerFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

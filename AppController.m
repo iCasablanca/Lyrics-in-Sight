@@ -27,24 +27,37 @@
 #pragma mark start up methods
 - (void)createStatusItem
 {
-	NSMenu        *theMenu;
-	statusItem = [[NSStatusBar systemStatusBar] 
-								statusItemWithLength:NSVariableStatusItemLength];
+	statusItem = [[NSStatusBar systemStatusBar] statusItemWithLength:NSVariableStatusItemLength];
 	[statusItem setImage:[NSImage imageNamed:@"menubaricon"]];
 	[statusItem setHighlightMode:YES];
-	[statusItem setTitle:[NSString 
-												stringWithString:@""]]; 
+	[statusItem setTitle:[NSString stringWithString:@""]]; 
 	[statusItem setEnabled:YES];
 	[statusItem setToolTip:@""];
 	
-	theMenu = [[NSMenu alloc] initWithTitle:@""];	
-	NSMenuItem *item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
-																								action:@selector(addPanel:)
-																				 keyEquivalent:@""];
-	[item setTarget:self];
-	[item setTag:ADD_PANEL_MENU_ITEM];
-	[theMenu addItem:item];
+	NSMenu *theMenu = [[NSMenu alloc] initWithTitle:@""]; // create menu
 	
+	NSMenuItem *item = nil;
+	
+	// "Add Panel" item is a submenu
+	item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
+																		action:nil
+														 keyEquivalent:@""];
+	[theMenu addItem:item]; // create item
+	NSMenu *addPanelMenu = [[NSMenu alloc] initWithTitle:@""]; // create submenu (late attached to item)
+	
+	// get all availabe valid types from controller factory to create menu items for them
+	for (NSString *type in [ControllerFactory validTypes]) {
+		item = [[NSMenuItem alloc] initWithTitle:type
+																			action:@selector(addPanel:)
+															 keyEquivalent:@""];
+		[item setTarget:self];
+		[item setTag:ADD_PANEL_MENU_ITEM];
+		[addPanelMenu addItem:item]; // add items to submenu
+	}
+	[theMenu setSubmenu:addPanelMenu forItem:item]; // attach submenu to item
+	
+	
+	// "Edit Panels" item
 	item = [[NSMenuItem alloc] initWithTitle:@"Edit Panels"
 																		action:@selector(switchEditMode:)
 														 keyEquivalent:@""];
@@ -52,6 +65,8 @@
 	[item setTag:EDIT_MODE_MENU_ITEM];
 	[theMenu addItem:item];
 	
+	
+	// "Quit Lyrics in Sight" item
 	item = [[NSMenuItem alloc] initWithTitle:@"Quit Lyrics in Sight"
 																		action:@selector(terminate:)
 														 keyEquivalent:@""];
