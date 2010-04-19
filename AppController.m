@@ -74,7 +74,7 @@
 NSString * const LiSPanelCount = @"PanelCount";
 NSString * const LiSPanelControllers = @"PanelControllers";
 
-- (void)registeringUserDefaults
+- (void)registerUserDefaults
 {
 	// inititalize default user defaults
 	NSMutableDictionary *defaultValues = [NSMutableDictionary dictionary];
@@ -84,9 +84,9 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 	
 	PanelController *panel = [[PanelController alloc] init];
 	
-	NSMutableArray *panels = [NSMutableArray arrayWithObject:panel];
+	NSMutableArray *panels = [NSMutableArray arrayWithObject:[panel dictionary]];
 	
-	[defaultValues setObject:[NSKeyedArchiver archivedDataWithRootObject:panels]
+	[defaultValues setObject:panels
 										forKey:LiSPanelControllers];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
@@ -96,7 +96,7 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	panelCount = [defaults integerForKey:LiSPanelCount];
-	//panelController = [NSKeyedUnarchiver unarchiveObjectWithData:[defaults objectForKey:LiSPanelControllers]];
+
 	panelController = [NSMutableArray arrayWithCapacity:panelCount];
 	NSArray *panelControllerAsDictionaries = [defaults objectForKey:LiSPanelControllers];
 	for (int i = 0; i < panelCount; i++) {

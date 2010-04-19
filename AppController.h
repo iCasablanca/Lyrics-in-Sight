@@ -35,7 +35,7 @@ extern NSString * const LiSPanelControllers;
 - (void)createPanels;
 
 // user default management
-- (void)registeringUserDefaults;
+- (void)registerUserDefaults;
 - (void)loadUserDefaults;
 - (void)saveUserDefaults;
 

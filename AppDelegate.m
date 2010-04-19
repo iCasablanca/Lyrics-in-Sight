@@ -15,7 +15,7 @@
 	
 	[controller createStatusItem];
 	
-	[controller registeringUserDefaults];
+	[controller registerUserDefaults];
 	[controller loadUserDefaults];
 	
 	[controller createPanels];
