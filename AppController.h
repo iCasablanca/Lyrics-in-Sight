@@ -27,8 +27,7 @@ extern NSString * const LiSPanelControllers;
 	BOOL inEditMode;
 	
 	// data to be saved in NSUserDefaults
-	NSInteger panelCount;
-	NSMutableArray *panelController;
+	NSMutableArray *panelControllers;
 }
 
 // start up methods

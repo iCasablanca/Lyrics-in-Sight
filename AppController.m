@@ -77,9 +77,7 @@
 
 - (void)createPanels
 {	
-	for (int i = 0; i < panelCount; i++) {
-		PanelController *controller = [panelController objectAtIndex:i];
-		[controller setController:self];
+	for(PanelController *controller in panelControllers) {
 		[controller showWindow:self];
 	}
 }
@@ -93,14 +91,10 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 	// inititalize default user defaults
 	NSMutableDictionary *defaultValues = [NSMutableDictionary dictionary];
 	
-	[defaultValues setObject:[NSNumber numberWithInt:1]
+	[defaultValues setObject:[NSNumber numberWithInt:0]
 										forKey:LiSPanelCount];
-	
-	PanelController *panel = [[PanelController alloc] init];
-	
-	NSMutableArray *panels = [NSMutableArray arrayWithObject:[panel dictionary]];
-	
-	[defaultValues setObject:panels
+
+	[defaultValues setObject:[NSMutableArray array]
 										forKey:LiSPanelControllers];
 	
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaultValues];
@@ -109,26 +103,21 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 - (void)loadUserDefaults
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	panelCount = [defaults integerForKey:LiSPanelCount];
 
-	panelController = [NSMutableArray arrayWithCapacity:panelCount];
+	panelControllers = [NSMutableArray array];
 	NSArray *panelControllerAsDictionaries = [defaults objectForKey:LiSPanelControllers];
-	for (int i = 0; i < panelCount; i++) {
-		NSDictionary *dict = [panelControllerAsDictionaries objectAtIndex:i];
-		[panelController insertObject:[[PanelController alloc] initWithDictionary:dict]
-													atIndex:i];
+	for (NSDictionary *dict in panelControllerAsDictionaries ) {
+		[panelControllers addObject:[[PanelController alloc] initWithController:self
+																																andDictionary:dict]];
 	}
 }
 
 - (void)saveUserDefaults
 {
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setObject:[NSNumber numberWithInt:panelCount]
-							 forKey:LiSPanelCount];
-	NSMutableArray *panelControllerAsDictionaries = [NSMutableArray arrayWithCapacity:panelCount];
-	for (int i = 0; i < panelCount; i++) {
-		[panelControllerAsDictionaries insertObject:[[panelController objectAtIndex:i] dictionary]
-																				atIndex:i];
+	NSMutableArray *panelControllerAsDictionaries = [NSMutableArray arrayWithCapacity:[panelControllers count]];
+	for (PanelController *controller in panelControllers) {
+		[panelControllerAsDictionaries addObject:[controller dictionary]];
 	}
 	[defaults setObject:panelControllerAsDictionaries
 							 forKey:LiSPanelControllers];
@@ -138,13 +127,13 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 - (void)switchEditMode:(id)sender
 {
 	if (inEditMode) { // switch to normal mode
-		for (int i = 0; i < [panelController count]; i++) {
-			[[panelController objectAtIndex:i] editModeStopped];
+		for (int i = 0; i < [panelControllers count]; i++) {
+			[[panelControllers objectAtIndex:i] editModeStopped];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
 	} else { // switch to edit mode
-		for (int i = 0; i < [panelController count]; i++) {
-			[[panelController objectAtIndex:i] editModeStarted];
+		for (int i = 0; i < [panelControllers count]; i++) {
+			[[panelControllers objectAtIndex:i] editModeStarted];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOnState];
 	}
@@ -154,11 +143,10 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 #pragma mark panel management
 - (void)addPanel:(id)sender
 {
-	panelCount++;
-	PanelController *controller = [[PanelController alloc] init];
-	[panelController addObject:controller];
+	PanelController *controller = [[PanelController alloc] initWithController:self
+																																		andType:[sender title]];
+	[panelControllers addObject:controller];
 	
-	[controller setController:self];
 	[controller showWindow:self];
 	
 	// save change to user defaults
@@ -167,8 +155,7 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 
 - (void)removePanel:(PanelController *)aController
 {
-	[panelController removeObject:aController];	
-	panelCount--;
+	[panelControllers removeObject:aController];
 	
 	// save change to user defaults
 	[self saveUserDefaults];
@@ -177,15 +164,15 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 #pragma mark panel content management
 - (void)clearPanels
 {
-	for (int i = 0; i < [panelController count]; i++) {
-		[[panelController objectAtIndex:i] clear];
+	for (int i = 0; i < [panelControllers count]; i++) {
+		[[panelControllers objectAtIndex:i] clear];
 	}
 }
 
 - (void)updatePanels:(NSDictionary *)songInfo
 {
-	for	(int i = 0; i < [panelController count]; i++) {
-		[[panelController objectAtIndex:i] update:songInfo];
+	for	(int i = 0; i < [panelControllers count]; i++) {
+		[[panelControllers objectAtIndex:i] update:songInfo];
 	}
 }
 

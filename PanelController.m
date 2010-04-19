@@ -12,29 +12,40 @@
 @implementation PanelController
 
 #pragma mark initialize and set up methods
-- (id)init
+- (id)initWithController:(AppController *)aController andType:(NSString *)aType;
 {
 	if (![super initWithWindowNibName:@"Panel"])
 		return nil;
+	controller = aController;
+	
 	[self setShouldCascadeWindows:NO];
-	controller = nil;
-	rect = NSMakeRect(500, 500, 500, 300); // Defaults
-	
+	rect = NSMakeRect(500, 500, 500, 300); // Defautls
+	type = aType;
 	
 	return self;
 }
 
-- (id)initWithController:(AppController *)aController
+#pragma mark  converting the content stored in NSUserDefualts to and from a dictionary
+- (id)initWithController:(AppController *)aController andDictionary:(NSDictionary *)aDictionary;
 {
-	if (![self init])
+	if (![self initWithController:aController andType:[aDictionary objectForKey:@"Type"]])
 		return nil;
-	controller = aController;
+	rect.origin.x			= [[aDictionary objectForKey:@"X"] floatValue];
+	rect.origin.y			= [[aDictionary objectForKey:@"Y"] floatValue];
+	rect.size.width		= [[aDictionary objectForKey:@"Width"] floatValue];
+	rect.size.height	= [[aDictionary objectForKey:@"Height"] floatValue];
 	return self;
 }
 
-- (void)setController:(AppController *)aController
+- (NSDictionary *)dictionary
 {
-	controller = aController;
+	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
+	[dictionary setObject:type forKey:@"Type"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.x] forKey:@"X"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.y] forKey:@"Y"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.size.width] forKey:@"Width"];
+	[dictionary setObject:[NSNumber numberWithFloat:rect.size.height] forKey:@"Height"];
+	return dictionary;
 }
 
 #pragma mark  panel content management methods
@@ -85,28 +96,6 @@
 	[textView setEditable:NO];
 	[textView setSelectable:NO];
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
-}
-
-#pragma mark  converting the content stored in NSUserDefualts to and from a dictionary
-- (id)initWithDictionary:(NSDictionary *)aDictionary
-{
-	if (![self init])
-		return nil;
-	rect.origin.x			= [[aDictionary objectForKey:@"X"] floatValue];
-	rect.origin.y			= [[aDictionary objectForKey:@"Y"] floatValue];
-	rect.size.width		= [[aDictionary objectForKey:@"Width"] floatValue];
-	rect.size.height	= [[aDictionary objectForKey:@"Height"] floatValue];
-	return self;
-}
-
-- (NSDictionary *)dictionary
-{
-	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.x] forKey:@"X"];
-	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.y] forKey:@"Y"];
-	[dictionary setObject:[NSNumber numberWithFloat:rect.size.width] forKey:@"Width"];
-	[dictionary setObject:[NSNumber numberWithFloat:rect.size.height] forKey:@"Height"];
-	return dictionary;
 }
 
 #pragma mark NSWindowController methods

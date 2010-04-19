@@ -18,21 +18,19 @@
 }
 
 // initialize and set up methods
-- (id)init;
-- (id)initWithController:(AppController *)aController;
-- (void)setController:(AppController *)aController;
+- (id)initWithController:(AppController *)aController andType:(NSString *)aType;
+
+// converting the content stored in NSUserDefualts to and from a dictionary
+- (id)initWithController:(AppController *)aController andDictionary:(NSDictionary *)aDictionary;
+- (NSDictionary *)dictionary;
 
 // panel content management methods
 - (void)clear;
-- (void)update:(NSDictionary *)songInfo;
+- (void)update:(NSDictionary *)userInfo;
 
 // edit mode management methods
 - (void)editModeStarted;
 - (void)editModeStopped;
-
-// converting the content stored in NSUserDefualts to and from a dictionary
-- (id)initWithDictionary:(NSDictionary *)aDictionary;
-- (NSDictionary *)dictionary;
 
 // NSWindow delegate methods
 - (void)windowDidLoad;
