@@ -7,15 +7,19 @@
 
 #import <Cocoa/Cocoa.h>
 @class AppController;
+@class AbstractNotifier;
 
 @interface PanelController : NSWindowController {
 	AppController *controller;
+	AbstractNotifier *notifier;
 	IBOutlet NSTextView *textView;
 	
-	// data to be stored in NSUserDefaults see: encodeWithCoder / initWithCoder
-	NSRect rect;
+	// data to be stored in NSUserDefaults see: dictionary / initWithController:andDictionary
 	NSString *type;
+	NSRect rect;
 }
+
+@property (readonly) NSString* type;
 
 // initialize and set up methods
 - (id)initWithController:(AppController *)aController andType:(NSString *)aType;
@@ -25,7 +29,6 @@
 - (NSDictionary *)dictionary;
 
 // panel content management methods
-- (void)clear;
 - (void)update:(NSDictionary *)userInfo;
 
 // edit mode management methods

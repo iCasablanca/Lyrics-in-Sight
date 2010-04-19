@@ -6,7 +6,7 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "AppController.h"
+@class AppController;
 
 @interface AppDelegate : NSObject <NSApplicationDelegate> {
 	AppController *controller;

@@ -6,9 +6,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "iTunesControl.h"
-#import "PanelController.h"
-#import "ControllerFactory.h"
+@class iTunesNotifier;
+@class PanelController;
+@class NotifierFactory;
 
 typedef enum {
 	QUIT_LYRICS_IN_SIGHT_MENU_ITEM = 0,
@@ -16,13 +16,10 @@ typedef enum {
 	ADD_PANEL_MENU_ITEM = 2
 } MenuItems;
 
-extern NSString * const LiSPanelCount;
 extern NSString * const LiSPanelControllers;
 
 @interface AppController : NSObject {
 	NSStatusItem *statusItem;
-	
-	iTunesControl *iTC;
 	
 	BOOL inEditMode;
 	
@@ -45,10 +42,5 @@ extern NSString * const LiSPanelControllers;
 // panel management
 - (void)addPanel:(id)sender;
 - (void)removePanel:(PanelController *)aController;
-
-// panel content management
-- (void)clearPanels;
-- (void)updatePanels:(NSDictionary *)userInfo;
-- (NSDictionary *)getSongInfo;
 
 @end

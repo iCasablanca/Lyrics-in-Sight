@@ -7,9 +7,13 @@
 
 #import "PanelController.h"
 #import "AppController.h"
+#import "AbstractNotifier.h"
+#import "NotifierFactory.h"
 
 
 @implementation PanelController
+
+@synthesize type;
 
 #pragma mark initialize and set up methods
 - (id)initWithController:(AppController *)aController andType:(NSString *)aType;
@@ -21,6 +25,9 @@
 	[self setShouldCascadeWindows:NO];
 	rect = NSMakeRect(500, 500, 500, 300); // Defautls
 	type = aType;
+	
+	notifier = [NotifierFactory getNotifierForPanelController:self];
+	[notifier registerPanelController:self];
 	
 	return self;
 }
@@ -49,13 +56,13 @@
 }
 
 #pragma mark  panel content management methods
-- (void)clear
-{
-	[textView setString:@""];
-}
-
 - (void)update:(NSDictionary *)songInfo
-{	
+{
+	if (songInfo == nil) {
+		[textView setString:@""];
+		return;
+	}
+	
 	NSString *artist	= [songInfo objectForKey:@"Artist"];
 	artist =  (artist == nil) ? @"" : artist;
 	NSString *album		= [songInfo objectForKey:@"Album"];
@@ -98,7 +105,7 @@
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
 }
 
-#pragma mark NSWindowController methods
+#pragma mark NSWindow delegate methods
 -(void)windowDidLoad
 {
 	NSRect frame = [[self window] frame];
@@ -108,12 +115,9 @@
 	
 	[self editModeStopped];
 	
-	if (controller != nil) {
-		[self update:[controller getSongInfo]];
-	}
+	[notifier requestUpdate:self];
 	
 	frame = [[self window] frame];
-	NSLog(@"Frame: %f, %f", frame.origin.x, frame.origin.y);
 	
 	[[self window] display];
 }
@@ -121,7 +125,6 @@
 - (void)windowDidMove:(NSNotification *)windowDidMoveNotification
 {
 	rect = [[windowDidMoveNotification object] frame];
-	NSLog(@"%f, %f", rect.origin.x, rect.origin.y);
 }
 
 - (void)windowDidResize:(NSNotification *)windowDidResizeNotification
@@ -131,6 +134,7 @@
 
 - (void)windowWillClose:(NSNotification *)notification
 {
+	[notifier unregisterPanelController:self];
 	[controller removePanel:self];
 }
 

@@ -13,12 +13,13 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E641A211179ED4E00F2A306 /* LyricsFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E641A201179ED4E00F2A306 /* LyricsFinder.m */; };
-		D06294A0117C6BE200255BF8 /* ControllerFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = D062949F117C6BE200255BF8 /* ControllerFactory.m */; };
+		D06294A0117C6BE200255BF8 /* NotifierFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = D062949F117C6BE200255BF8 /* NotifierFactory.m */; };
+		D06295AF117C86E000255BF8 /* AbstractNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D06295AE117C86E000255BF8 /* AbstractNotifier.m */; };
 		D06516E61178DBBC004BE15B /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06516E51178DBBC004BE15B /* PanelController.m */; };
 		D06517341178E0AE004BE15B /* Panel.xib in Resources */ = {isa = PBXBuildFile; fileRef = D06517331178E0AE004BE15B /* Panel.xib */; };
 		D0763604117AF4D600A0899A /* AppController.m in Sources */ = {isa = PBXBuildFile; fileRef = D0763603117AF4D600A0899A /* AppController.m */; };
 		D09B80D41178934400539C51 /* ScriptingBridge.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D09B80D31178934400539C51 /* ScriptingBridge.framework */; };
-		D09B80E51178944900539C51 /* iTunesControl.m in Sources */ = {isa = PBXBuildFile; fileRef = D09B80E41178944900539C51 /* iTunesControl.m */; };
+		D09B80E51178944900539C51 /* iTunesNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D09B80E41178944900539C51 /* iTunesNotifier.m */; };
 		D0B64A531178B88A0002C7E5 /* menubaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = D0B64A521178B88A0002C7E5 /* menubaricon.png */; };
 /* End PBXBuildFile section */
 
@@ -37,8 +38,10 @@
 		8D1107320486CEB800E47090 /* Lyrics in Sight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyrics in Sight.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsFinder.h; sourceTree = "<group>"; };
 		9E641A201179ED4E00F2A306 /* LyricsFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsFinder.m; sourceTree = "<group>"; };
-		D062949E117C6BE200255BF8 /* ControllerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllerFactory.h; sourceTree = "<group>"; };
-		D062949F117C6BE200255BF8 /* ControllerFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControllerFactory.m; sourceTree = "<group>"; };
+		D062949E117C6BE200255BF8 /* NotifierFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifierFactory.h; sourceTree = "<group>"; };
+		D062949F117C6BE200255BF8 /* NotifierFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifierFactory.m; sourceTree = "<group>"; };
+		D06295AD117C86E000255BF8 /* AbstractNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractNotifier.h; sourceTree = "<group>"; };
+		D06295AE117C86E000255BF8 /* AbstractNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AbstractNotifier.m; sourceTree = "<group>"; };
 		D06516E41178DBBC004BE15B /* PanelController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PanelController.h; sourceTree = "<group>"; };
 		D06516E51178DBBC004BE15B /* PanelController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PanelController.m; sourceTree = "<group>"; };
 		D06517331178E0AE004BE15B /* Panel.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = Panel.xib; sourceTree = "<group>"; };
@@ -46,8 +49,8 @@
 		D0763603117AF4D600A0899A /* AppController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppController.m; sourceTree = "<group>"; };
 		D09B80D31178934400539C51 /* ScriptingBridge.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ScriptingBridge.framework; path = System/Library/Frameworks/ScriptingBridge.framework; sourceTree = SDKROOT; };
 		D09B80E2117893E600539C51 /* iTunes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunes.h; sourceTree = "<group>"; };
-		D09B80E31178944900539C51 /* iTunesControl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunesControl.h; sourceTree = "<group>"; };
-		D09B80E41178944900539C51 /* iTunesControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iTunesControl.m; sourceTree = "<group>"; };
+		D09B80E31178944900539C51 /* iTunesNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iTunesNotifier.h; sourceTree = "<group>"; };
+		D09B80E41178944900539C51 /* iTunesNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iTunesNotifier.m; sourceTree = "<group>"; };
 		D0B64A521178B88A0002C7E5 /* menubaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menubaricon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -74,8 +77,10 @@
 				D0763603117AF4D600A0899A /* AppController.m */,
 				D06516E41178DBBC004BE15B /* PanelController.h */,
 				D06516E51178DBBC004BE15B /* PanelController.m */,
-				D062949E117C6BE200255BF8 /* ControllerFactory.h */,
-				D062949F117C6BE200255BF8 /* ControllerFactory.m */,
+				D062949E117C6BE200255BF8 /* NotifierFactory.h */,
+				D062949F117C6BE200255BF8 /* NotifierFactory.m */,
+				D06295AD117C86E000255BF8 /* AbstractNotifier.h */,
+				D06295AE117C86E000255BF8 /* AbstractNotifier.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -153,8 +158,8 @@
 		D062949D117C6BAF00255BF8 /* iTunes */ = {
 			isa = PBXGroup;
 			children = (
-				D09B80E31178944900539C51 /* iTunesControl.h */,
-				D09B80E41178944900539C51 /* iTunesControl.m */,
+				D09B80E31178944900539C51 /* iTunesNotifier.h */,
+				D09B80E41178944900539C51 /* iTunesNotifier.m */,
 				9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */,
 				9E641A201179ED4E00F2A306 /* LyricsFinder.m */,
 			);
@@ -220,11 +225,12 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* AppDelegate.m in Sources */,
-				D09B80E51178944900539C51 /* iTunesControl.m in Sources */,
+				D09B80E51178944900539C51 /* iTunesNotifier.m in Sources */,
 				D06516E61178DBBC004BE15B /* PanelController.m in Sources */,
 				9E641A211179ED4E00F2A306 /* LyricsFinder.m in Sources */,
 				D0763604117AF4D600A0899A /* AppController.m in Sources */,
-				D06294A0117C6BE200255BF8 /* ControllerFactory.m in Sources */,
+				D06294A0117C6BE200255BF8 /* NotifierFactory.m in Sources */,
+				D06295AF117C86E000255BF8 /* AbstractNotifier.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

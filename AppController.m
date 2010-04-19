@@ -6,6 +6,9 @@
 //
 
 #import "AppController.h"
+#import "iTunesNotifier.h"
+#import "PanelController.h"
+#import "NotifierFactory.h"
 
 
 @implementation AppController
@@ -16,11 +19,6 @@
 	if (![super init])
 		return nil;
 	inEditMode = FALSE;
-	iTC = [[iTunesControl alloc] initWithController:self];
-	[[NSDistributedNotificationCenter defaultCenter] addObserver:iTC
-																											selector:@selector(songChanged:)
-																													name:@"com.apple.iTunes.playerInfo"
-																												object:nil];
 	return self;
 }
 
@@ -41,7 +39,7 @@
 	NSMenu *addPanelMenu = [[NSMenu alloc] initWithTitle:@""]; // create submenu (late attached to item)
 	
 	// get all availabe valid types from controller factory to create menu items for them
-	for (NSString *type in [ControllerFactory validTypes]) {
+	for (NSString *type in [NotifierFactory validTypes]) {
 		item = [[NSMenuItem alloc] initWithTitle:type
 																			action:@selector(addPanel:)
 															 keyEquivalent:@""];
@@ -83,16 +81,12 @@
 }
 
 #pragma mark user default management
-NSString * const LiSPanelCount = @"PanelCount";
 NSString * const LiSPanelControllers = @"PanelControllers";
 
 - (void)registerUserDefaults
 {
 	// inititalize default user defaults
 	NSMutableDictionary *defaultValues = [NSMutableDictionary dictionary];
-	
-	[defaultValues setObject:[NSNumber numberWithInt:0]
-										forKey:LiSPanelCount];
 
 	[defaultValues setObject:[NSMutableArray array]
 										forKey:LiSPanelControllers];
@@ -165,26 +159,6 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 	
 	// save change to user defaults
 	[self saveUserDefaults];
-}
-
-#pragma mark panel content management
-- (void)clearPanels
-{
-	for (PanelController *controller in panelControllers) {
-		[controller clear];
-	}
-}
-
-- (void)updatePanels:(NSDictionary *)userInfo
-{
-	for	(PanelController *controller in panelControllers) {
-		[controller update:userInfo];
-	}
-}
-
-- (NSDictionary *)getSongInfo
-{
-	return [iTC getSongInfo];
 }
 
 @end

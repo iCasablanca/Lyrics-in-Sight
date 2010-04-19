@@ -6,6 +6,7 @@
 //
 
 #import "AppDelegate.h"
+#import "AppController.h"
 
 @implementation AppDelegate
 
