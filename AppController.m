@@ -153,7 +153,11 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 
 - (void)removePanel:(PanelController *)aController
 {
+	[panelController removeObject:aController];	
+	panelCount--;
 	
+	// save change to user defaults
+	[self saveUserDefaults];
 }
 
 #pragma mark panel content management
