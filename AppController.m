@@ -38,11 +38,6 @@
 	
 	NSMenuItem *item = nil;
 	
-	// "Add Panel" item is a submenu
-	item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
-																		action:nil
-														 keyEquivalent:@""];
-	[theMenu addItem:item]; // create item
 	NSMenu *addPanelMenu = [[NSMenu alloc] initWithTitle:@""]; // create submenu (late attached to item)
 	
 	// get all availabe valid types from controller factory to create menu items for them
@@ -54,8 +49,12 @@
 		[item setTag:ADD_PANEL_MENU_ITEM];
 		[addPanelMenu addItem:item]; // add items to submenu
 	}
+	// "Add Panel" item is a submenu
+	item = [[NSMenuItem alloc] initWithTitle:@"Add Panel"
+																		action:nil
+														 keyEquivalent:@""];
+	[theMenu addItem:item]; // create item
 	[theMenu setSubmenu:addPanelMenu forItem:item]; // attach submenu to item
-	
 	
 	// "Edit Panels" item
 	item = [[NSMenuItem alloc] initWithTitle:@"Edit Panels"
