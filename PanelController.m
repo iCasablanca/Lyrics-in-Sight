@@ -140,6 +140,11 @@
 	rect = [[windowDidResizeNotification object] frame];
 }
 
+- (void)windowWillClose:(NSNotification *)notification
+{
+	[controller removePanel:self];
+}
+
 - (NSString *)description
 {
 	return [NSString stringWithFormat:@"%f, %f: %f, %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height];

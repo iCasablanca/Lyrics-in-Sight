@@ -34,9 +34,10 @@
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
 - (NSDictionary *)dictionary;
 
-// NSWindowController methods
+// NSWindow delegate methods
 - (void)windowDidLoad;
 - (void)windowDidMove:(NSNotification *)windowDidMoveNotification;
 - (void)windowDidResize:(NSNotification *)windowDidResizeNotification;
+- (void)windowWillClose:(NSNotification *)notification;
 
 @end
