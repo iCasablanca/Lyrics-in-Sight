@@ -17,20 +17,46 @@
 		return nil;
 	
 	dictionary = aDictionary;
-	specialCharacters = [NSCharacterSet characterSetWithCharactersInString:@"<>{}|"];
-	openingCharacters = [NSCharacterSet characterSetWithCharactersInString:@"<{|"];
-	closingCharacters = [NSCharacterSet characterSetWithCharactersInString:@">}|"];	
+	specialCharacters = [NSCharacterSet characterSetWithCharactersInString:@"<>{}[]|"];
 	
 	return self;
+}
+
+- (NSString *)evaluateNextAlternative:(NSString *)formula
+{
+	NSRange range = [formula rangeOfString:@"|"];
+	if (range.location == NSNotFound) { // last alternative: return empty string
+		return @"";
+	}
+	// alternative found -> evaluate
+	return [self evaluateFormula:[formula substringFromIndex:range.location + 1]];
 }
 
 - (NSString *)evaluateFormula:(NSString *)formula
 {
 	NSMutableString *output = [NSMutableString string];
+	NSRange range;
 	
 	while (TRUE) {
+		
+		if ([formula length] > 0 && [formula characterAtIndex:0] == '[') {
+			range = [formula rangeOfString:@"]"];
+			if (range.location == NSNotFound) {
+				NSLog(@"Formula malformed: '[' without matching ']'");
+				return @"";
+			}
+			
+			// split
+			NSString *condition = [formula substringWithRange:NSMakeRange(1, range.location - 1)];
+			formula = [formula substringFromIndex:range.location + 1];
+			
+			// test condition
+			if (![self evaluateCondition:condition]) {
+				return [self evaluateNextAlternative:formula];
+			}
+		}
 	
-		NSRange range = [formula rangeOfCharacterFromSet:openingCharacters];
+		range = [formula rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"<{|"]];
 		
 		// no special characters found -> append remaining formula and return output
 		if (range.location == NSNotFound) {
@@ -59,12 +85,7 @@
 				// evaluate token
 				NSString *value = [self evaluateToken:token];
 				if (value == nil) { // token evaluates to nil -> find next alternative
-					range = [formula rangeOfString:@"|"];
-					if (range.location == NSNotFound) { // last alternative: return empty string
-						return @"";
-					}
-					// alternative found -> evaluate
-					return [self evaluateFormula:[formula substringFromIndex:range.location + 1]];
+					return [self evaluateNextAlternative:formula];
 				}
 				// append evaluated token
 				[output appendString:value];				
@@ -115,7 +136,63 @@
 		NSLog(@"Malformed token: %@", token);
 		return nil;
 	}
-	return [dictionary objectForKey:token];
+	return [[dictionary objectForKey:token] description];
+}
+
+- (BOOL)evaluateCondition:(NSString *)condition
+{
+	// search for == operator
+	NSRange range = [condition rangeOfString:@"=="];
+	BOOL equal = TRUE;
+	
+	if (range.location == NSNotFound) {
+		// search for != operator
+		range = [condition rangeOfString:@"!="];
+		equal = FALSE;
+	}
+	
+	// error: no operator found
+	if (range.location == NSNotFound) {
+		NSLog(@"Condition malformed: neither == nor != found");
+		return FALSE;
+	}
+	
+	// split condition at operator
+	NSString *first		= [condition substringToIndex:range.location];
+	NSString *second	= [condition substringFromIndex:range.location + 2];
+	
+	// evaluate first operand
+	if ([first length] > 0 && [first characterAtIndex:0] == '"' && [first characterAtIndex:[first length] - 1] == '"') {
+		first = [first substringWithRange:NSMakeRange(1, [first length] - 2)];
+	} else if ([first length] > 0 && [first characterAtIndex:0] == '<' && [first characterAtIndex:[first length] - 1] == '>') {
+		first = [self evaluateToken:[first substringWithRange:NSMakeRange(1, [first length] - 2)]];
+	} else {
+		first = nil;
+	}
+	
+	// evaluate second operand
+	if ([second length] > 0 && [second characterAtIndex:0] == '"' && [second characterAtIndex:[second length] - 1] == '"') {
+		second = [second substringWithRange:NSMakeRange(1, [second length] - 2)];
+	} else if ([second length] > 0 && [second characterAtIndex:0] == '<' && [second characterAtIndex:[second length] - 1] == '>') {
+		second = [self evaluateToken:[second substringWithRange:NSMakeRange(1, [second length] - 2)]];
+	} else {
+		second = nil;
+	}
+	
+	// an operand was evaluated to nil -> return false
+	if (first == nil || second == nil) {
+		return FALSE;
+	}
+	
+	// make string comparison
+	BOOL result = [first isEqualToString:second];
+	
+	// return result depending on given operator
+	if (equal) {
+		return result;
+	} else {
+		return !result;
+	}
 }
 
 @end

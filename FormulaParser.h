@@ -12,13 +12,12 @@
 @interface FormulaParser : NSObject {
 	NSDictionary *dictionary;
 	NSCharacterSet *specialCharacters;
-	NSCharacterSet *openingCharacters;
-	NSCharacterSet *closingCharacters;
 }
 
 - (id)initWithDictionary:(NSDictionary *)aDictionary;
 
 - (NSString *)evaluateFormula:(NSString *)formula;
 - (NSString *)evaluateToken:(NSString *)token;
+- (BOOL)evaluateCondition:(NSString *)condition;
 
 @end
