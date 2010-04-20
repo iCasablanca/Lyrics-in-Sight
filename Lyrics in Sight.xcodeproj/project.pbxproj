@@ -13,6 +13,7 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9E641A211179ED4E00F2A306 /* LyricsFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E641A201179ED4E00F2A306 /* LyricsFinder.m */; };
+		9E78A093117E22080020FF54 /* FormulaParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E78A092117E22080020FF54 /* FormulaParser.m */; };
 		D06294A0117C6BE200255BF8 /* NotifierFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = D062949F117C6BE200255BF8 /* NotifierFactory.m */; };
 		D06295AF117C86E000255BF8 /* AbstractNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D06295AE117C86E000255BF8 /* AbstractNotifier.m */; };
 		D06516E61178DBBC004BE15B /* PanelController.m in Sources */ = {isa = PBXBuildFile; fileRef = D06516E51178DBBC004BE15B /* PanelController.m */; };
@@ -38,6 +39,8 @@
 		8D1107320486CEB800E47090 /* Lyrics in Sight.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Lyrics in Sight.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E641A1F1179ED4E00F2A306 /* LyricsFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LyricsFinder.h; sourceTree = "<group>"; };
 		9E641A201179ED4E00F2A306 /* LyricsFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LyricsFinder.m; sourceTree = "<group>"; };
+		9E78A091117E22080020FF54 /* FormulaParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormulaParser.h; sourceTree = "<group>"; };
+		9E78A092117E22080020FF54 /* FormulaParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FormulaParser.m; sourceTree = "<group>"; };
 		D062949E117C6BE200255BF8 /* NotifierFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotifierFactory.h; sourceTree = "<group>"; };
 		D062949F117C6BE200255BF8 /* NotifierFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotifierFactory.m; sourceTree = "<group>"; };
 		D06295AD117C86E000255BF8 /* AbstractNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AbstractNotifier.h; sourceTree = "<group>"; };
@@ -81,6 +84,8 @@
 				D062949F117C6BE200255BF8 /* NotifierFactory.m */,
 				D06295AD117C86E000255BF8 /* AbstractNotifier.h */,
 				D06295AE117C86E000255BF8 /* AbstractNotifier.m */,
+				9E78A091117E22080020FF54 /* FormulaParser.h */,
+				9E78A092117E22080020FF54 /* FormulaParser.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -231,6 +236,7 @@
 				D0763604117AF4D600A0899A /* AppController.m in Sources */,
 				D06294A0117C6BE200255BF8 /* NotifierFactory.m in Sources */,
 				D06295AF117C86E000255BF8 /* AbstractNotifier.m in Sources */,
+				9E78A093117E22080020FF54 /* FormulaParser.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
