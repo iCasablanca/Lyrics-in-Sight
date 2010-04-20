@@ -56,20 +56,20 @@
 }
 
 #pragma mark  panel content management methods
-- (void)update:(NSDictionary *)songInfo
+- (void)update:(NSDictionary *)userInfo
 {
-	if (songInfo == nil) {
+	if (userInfo == nil) {
 		[textView setString:@""];
 		return;
 	}
 	
-	NSString *artist	= [songInfo objectForKey:@"Artist"];
+	NSString *artist	= [userInfo objectForKey:@"Artist"];
 	artist =  (artist == nil) ? @"" : artist;
-	NSString *album		= [songInfo objectForKey:@"Album"];
+	NSString *album		= [userInfo objectForKey:@"Album"];
 	album = (album == nil) ? @"" : album;
-	NSString *title		= [songInfo objectForKey:@"Name"];
+	NSString *title		= [userInfo objectForKey:@"Name"];
 	title = (title == nil) ? @"" : title;
-	NSString *lyrics	= [songInfo objectForKey:@"Lyrics"];
+	NSString *lyrics	= [userInfo objectForKey:@"Lyrics"];
 	lyrics = (lyrics == nil) ? @"" : lyrics;
 	
 	NSMutableString *output = [[NSMutableString alloc] init];
@@ -103,6 +103,9 @@
 	[textView setEditable:NO];
 	[textView setSelectable:NO];
 	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
+	
+	[controller saveUserDefaults]; // save user defautls, after finished editing
+	[notifier requestUpdate:self]; // update after finished editing
 }
 
 #pragma mark NSWindow delegate methods
