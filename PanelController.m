@@ -25,6 +25,7 @@
 	[self setShouldCascadeWindows:NO];
 	rect = NSMakeRect(500, 500, 500, 300); // Defautls
 	type = aType;
+	formula = @"Edit this text";
 	
 	notifier = [NotifierFactory getNotifierForPanelController:self];
 	[notifier registerPanelController:self];
@@ -37,6 +38,7 @@
 {
 	if (![self initWithController:aController andType:[aDictionary objectForKey:@"Type"]])
 		return nil;
+	formula           = [aDictionary objectForKey:@"Formula"];
 	rect.origin.x			= [[aDictionary objectForKey:@"X"] floatValue];
 	rect.origin.y			= [[aDictionary objectForKey:@"Y"] floatValue];
 	rect.size.width		= [[aDictionary objectForKey:@"Width"] floatValue];
@@ -48,6 +50,7 @@
 {
 	NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
 	[dictionary setObject:type forKey:@"Type"];
+	[dictionary setObject:formula forKey:@"Formula"];
 	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.x] forKey:@"X"];
 	[dictionary setObject:[NSNumber numberWithFloat:rect.origin.y] forKey:@"Y"];
 	[dictionary setObject:[NSNumber numberWithFloat:rect.size.width] forKey:@"Width"];
@@ -140,7 +143,8 @@
 
 - (NSString *)description
 {
-	return [NSString stringWithFormat:@"%f, %f: %f, %f", rect.origin.x, rect.origin.y, rect.size.width, rect.size.height];
+	return [NSString stringWithFormat:@"PanelController: type = '%@', formula = '%@', x = %f, y = %f, width = %f, height = %f", 
+					type, formula, rect.origin.x, rect.origin.y, rect.size.width, rect.size.height];
 }
 
 @end
