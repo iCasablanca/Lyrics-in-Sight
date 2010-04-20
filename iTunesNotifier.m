@@ -40,10 +40,9 @@ static iTunesNotifier *instance = nil;
 -(void) songChanged:(NSNotification *) aNotification
 {
 	NSDictionary *songInfo = [aNotification userInfo];
-	NSString *playerState = [songInfo objectForKey:@"Player State"];
-	if ( [playerState isEqualToString:@"Stopped"] ) {
-		userInfo = [NSDictionary dictionary];
-	} else {
+	userInfo = [songInfo mutableCopy];
+	
+	if ([iTunes currentTrack] != nil) {
 		// need to load lyrics extra (because not included in notification)
 		NSString *lyrics	= [[iTunes currentTrack] lyrics];
 		lyrics = (lyrics == nil) ? @"" : lyrics;
@@ -56,10 +55,8 @@ static iTunesNotifier *instance = nil;
 //				[[iTunes currentTrack] setLyrics:lyrics];
 //			}
 		} 
-		
-		userInfo = [songInfo mutableCopy];
 		[userInfo setObject:lyrics forKey:@"Lyrics"]; // add lyrics
-	}
+	}		
 	
 	for (PanelController *controller in panelControllers) {
 		[controller update:userInfo];
@@ -71,23 +68,116 @@ static iTunesNotifier *instance = nil;
 	if (userInfo == nil) {
 		if ([iTunes isRunning]) { // fill dictionary with AppleScript
 			userInfo = [NSMutableDictionary dictionary];
+			
+			iTunesEPlS state = [iTunes playerState];
+			switch (state) {
+				case iTunesEPlSStopped:
+					[userInfo setObject:@"Stopped" forKey:@"Player State"];
+					break;
+				case iTunesEPlSPlaying:
+					[userInfo setObject:@"Playing" forKey:@"Player State"];
+					break;
+				case iTunesEPlSPaused:
+					[userInfo setObject:@"Paused" forKey:@"Player State"];
+					break;
+				case iTunesEPlSFastForwarding:
+					[userInfo setObject:@"Fast Forwarding" forKey:@"Player State"];
+					break;
+				case iTunesEPlSRewinding:
+					[userInfo setObject:@"Rewinding" forKey:@"Player State"];
+					break;
+			}
+			
 			iTunesTrack *currentTrack = [iTunes currentTrack];
-			
-			NSString *artist = [currentTrack artist];
-			if (artist != nil)
-				[userInfo setObject:artist forKey:@"Artist"];
-			
-			NSString *album = [currentTrack album];
-			if (album != nil)
-				[userInfo setObject:album forKey:@"Album"];
-			
-			NSString *title = [currentTrack name];
-			if (title != nil)
-				[userInfo setObject:title forKey:@"Name"];
-			
-			NSString *lyrics	= [currentTrack lyrics];
-			if (lyrics != nil)
-				[userInfo setObject:lyrics forKey:@"Lyrics"];
+			if (currentTrack != nil) {
+				
+				if ([currentTrack album])
+					[userInfo setObject:[currentTrack album] 
+											 forKey:@"Album"];
+
+				if ([currentTrack albumArtist])
+					[userInfo setObject:[currentTrack albumArtist] 
+											 forKey:@"Album Artist"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack albumRating]]
+										 forKey:@"Album Rating"];
+				
+				if ([currentTrack artist])
+					[userInfo setObject:[currentTrack artist] 
+											 forKey:@"Artist"];
+
+				[userInfo setObject:[NSNumber numberWithInt:[[currentTrack artworks] count]] 
+										 forKey:@"Artwork Count"];
+				
+				[userInfo setObject:[NSNumber numberWithBool:[currentTrack compilation]]
+										 forKey:@"Compilation"];
+				
+				if ([currentTrack composer])
+					[userInfo setObject:[currentTrack composer] 
+											 forKey:@"Composer"];
+				
+				if ([currentTrack objectDescription])
+					[userInfo setObject:[currentTrack objectDescription] 
+											 forKey:@"Description"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack discCount]] 
+										 forKey:@"Disc Count"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack discNumber]] 
+										 forKey:@"Disc Number"];
+				
+				[userInfo setObject:[NSNumber numberWithBool:[currentTrack gapless]]
+										 forKey:@"GaplessAlbum"];
+				
+				if ([currentTrack genre])
+					[userInfo setObject:[currentTrack genre] 
+											 forKey:@"Genre"];
+				
+				if ([currentTrack grouping])
+					[userInfo setObject:[currentTrack grouping] 
+											 forKey:@"Grouping"];
+				
+				if ([currentTrack name])
+					[userInfo setObject:[currentTrack name] 
+											 forKey:@"Name"];
+				
+				if ([currentTrack persistentID])
+					[userInfo setObject:[currentTrack persistentID] 
+											 forKey:@"PersistentID"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack playedCount]] 
+										 forKey:@"Play Count"];
+				
+				if ([currentTrack playedDate])
+					[userInfo setObject:[currentTrack playedDate]
+											 forKey:@"Play Date"];
+
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack rating]]
+										 forKey:@"Rating Computed"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack skippedCount]]
+										 forKey:@"Skip Count"];
+				
+				if ([currentTrack skippedDate])
+					[userInfo setObject:[currentTrack skippedDate]
+											 forKey:@"Skip Date"];
+				
+				[userInfo setObject:[NSNumber numberWithDouble:[currentTrack duration] * 1000.0]
+										 forKey:@"Total Time"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack trackCount]]
+										 forKey:@"Track Count"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack trackNumber]]
+										 forKey:@"Track Number"];
+				
+				[userInfo setObject:[NSNumber numberWithInt:[currentTrack year]]
+										 forKey:@"Year"];
+				
+				if ([currentTrack lyrics])
+					[userInfo setObject:[currentTrack lyrics] 
+											 forKey:@"Lyrics"];
+			}
 		} else {
 			userInfo = [NSDictionary dictionary];
 		}

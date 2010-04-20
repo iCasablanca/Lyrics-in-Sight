@@ -115,7 +115,7 @@
 #pragma mark NSWindow delegate methods
 -(void)windowDidLoad
 {
-	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	//[[self window] setLevel:kCGDesktopIconWindowLevel];
 	[[self window] setFrame:rect display:YES animate:YES];
 	[self setEditable:NO];
 	
