@@ -16,7 +16,8 @@
 	
 	// data to be stored in NSUserDefaults see: dictionary / initWithController:andDictionary
 	NSString *type;
-	NSRect rect;
+	NSString *formula;
+	NSRect rect;	
 }
 
 @property (readonly) NSString* type;
