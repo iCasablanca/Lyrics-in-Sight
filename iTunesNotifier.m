@@ -42,7 +42,7 @@ static iTunesNotifier *instance = nil;
 	NSDictionary *songInfo = [aNotification userInfo];
 	NSString *playerState = [songInfo objectForKey:@"Player State"];
 	if ( [playerState isEqualToString:@"Stopped"] ) {
-		userInfo = nil;
+		userInfo = [NSDictionary dictionary];
 	} else {
 		// need to load lyrics extra (because not included in notification)
 		NSString *lyrics	= [[iTunes currentTrack] lyrics];
@@ -74,22 +74,22 @@ static iTunesNotifier *instance = nil;
 			iTunesTrack *currentTrack = [iTunes currentTrack];
 			
 			NSString *artist = [currentTrack artist];
-			artist = (artist == nil) ? @"" : artist;
-			[userInfo setObject:artist forKey:@"Artist"];
+			if (artist != nil)
+				[userInfo setObject:artist forKey:@"Artist"];
 			
 			NSString *album = [currentTrack album];
-			album = (album == nil) ? @"" : album;
-			[userInfo setObject:album forKey:@"Album"];
+			if (album != nil)
+				[userInfo setObject:album forKey:@"Album"];
 			
 			NSString *title = [currentTrack name];
-			title = (title == nil) ? @"" : title;
-			[userInfo setObject:title forKey:@"Name"];
+			if (title != nil)
+				[userInfo setObject:title forKey:@"Name"];
 			
 			NSString *lyrics	= [currentTrack lyrics];
-			lyrics = (lyrics == nil) ? @"" : lyrics;
-			[userInfo setObject:lyrics forKey:@"Lyrics"];
+			if (lyrics != nil)
+				[userInfo setObject:lyrics forKey:@"Lyrics"];
 		} else {
-			// print "iTunes not running"
+			userInfo = [NSDictionary dictionary];
 		}
 	}
 	[aController update:userInfo];

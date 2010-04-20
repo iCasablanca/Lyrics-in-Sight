@@ -9,6 +9,7 @@
 #import "AppController.h"
 #import "AbstractNotifier.h"
 #import "NotifierFactory.h"
+#import "FormulaParser.h"
 
 
 @implementation PanelController
@@ -23,7 +24,7 @@
 	controller = aController;
 	
 	[self setShouldCascadeWindows:NO];
-	rect = NSMakeRect(500, 500, 500, 300); // Defautls
+	rect = NSMakeRect(500, 500, 500, 300); // defaults
 	type = aType;
 	formula = @"Edit this text";
 	inEditMode = FALSE;
@@ -71,25 +72,8 @@
 		return;
 	}
 	
-	NSString *artist	= [userInfo objectForKey:@"Artist"];
-	artist =  (artist == nil) ? @"" : artist;
-	NSString *album		= [userInfo objectForKey:@"Album"];
-	album = (album == nil) ? @"" : album;
-	NSString *title		= [userInfo objectForKey:@"Name"];
-	title = (title == nil) ? @"" : title;
-	NSString *lyrics	= [userInfo objectForKey:@"Lyrics"];
-	lyrics = (lyrics == nil) ? @"" : lyrics;
-	
-	NSMutableString *output = [[NSMutableString alloc] init];
-	[output appendString:title];
-	[output appendString:@" / "];
-	[output appendString:artist];
-	[output appendString:@" / "];
-	[output appendString:album];
-	[output appendString:@"\n\n"];
-	[output appendString:lyrics];
-	
-	[textView setString:output];
+	FormulaParser *parser = [[FormulaParser alloc] initWithDictionary:userInfo];
+	[textView setString:[parser evaluateFormula:formula]];
 }
 
 #pragma mark  edit mode management methods
