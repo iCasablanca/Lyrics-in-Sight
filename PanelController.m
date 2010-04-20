@@ -115,16 +115,13 @@
 #pragma mark NSWindow delegate methods
 -(void)windowDidLoad
 {
-	NSRect frame = [[self window] frame];
-	[[self window] setMovable:NO];
-	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
+	[[self window] setLevel:kCGDesktopIconWindowLevel];
 	[[self window] setFrame:rect display:YES animate:YES];
-	
 	[self setEditable:NO];
 	
-	[notifier requestUpdate:self];
+	[textView setTextColor:[NSColor whiteColor]];
 	
-	frame = [[self window] frame];
+	[notifier requestUpdate:self];
 	
 	[[self window] display];
 }
