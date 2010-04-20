@@ -14,6 +14,8 @@
 	AbstractNotifier *notifier;
 	IBOutlet NSTextView *textView;
 	
+	BOOL inEditMode;
+	
 	// data to be stored in NSUserDefaults see: dictionary / initWithController:andDictionary
 	NSString *type;
 	NSString *formula;
@@ -35,6 +37,7 @@
 // edit mode management methods
 - (void)editModeStarted;
 - (void)editModeStopped;
+- (void)setEditable:(BOOL)newState;
 
 // NSWindow delegate methods
 - (void)windowDidLoad;

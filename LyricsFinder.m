@@ -60,8 +60,8 @@
 	
 	NSString *line;
 	NSEnumerator* iter = [lines objectEnumerator];
-	Boolean isLyric = FALSE;
-	Boolean firstLyricLine = FALSE;
+	BOOL isLyric = FALSE;
+	BOOL firstLyricLine = FALSE;
 	while (line = [iter nextObject]) {
 		if ([line isEqualToString:@"You must enable javascript to view this page. This is a requirement of our licensing agreement with music Gracenote."]) {
 			// last line before lyrics

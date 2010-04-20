@@ -125,6 +125,7 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 			[controller editModeStopped];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
+		[self saveUserDefaults]; // save user defaults after finished edit mode
 	} else { // switch to edit mode
 		for (PanelController *controller in panelControllers) {
 			[controller editModeStarted];

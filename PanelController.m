@@ -26,6 +26,7 @@
 	rect = NSMakeRect(500, 500, 500, 300); // Defautls
 	type = aType;
 	formula = @"Edit this text";
+	inEditMode = FALSE;
 	
 	notifier = [NotifierFactory getNotifierForPanelController:self];
 	[notifier registerPanelController:self];
@@ -61,6 +62,10 @@
 #pragma mark  panel content management methods
 - (void)update:(NSDictionary *)userInfo
 {
+	if (inEditMode) {
+		return;
+	}
+	
 	if (userInfo == nil) {
 		[textView setString:@""];
 		return;
@@ -90,25 +95,37 @@
 #pragma mark  edit mode management methods
 - (void)editModeStarted
 {
-	[[self window] setMovable:YES];
-	// add closeable and resizable to the mask
-	[[self window] setStyleMask:[[self window] styleMask] | NSClosableWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSUtilityWindowMask];
-	// make text editable and selectable
-	[textView setEditable:YES];
-	[textView setSelectable:YES];
+	inEditMode = TRUE;
+	
+	[self setEditable:YES];
+	
+	[textView setString:formula];
 }
 
 - (void)editModeStopped
 {
-	[[self window] setMovable:NO];
-	// remove closeable and resizable from the mask
-	[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask & ~NSTitledWindowMask & ~NSUtilityWindowMask];
-	[textView setEditable:NO];
-	[textView setSelectable:NO];
-	[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
+	inEditMode = FALSE;
 	
-	[controller saveUserDefaults]; // save user defautls, after finished editing
-	[notifier requestUpdate:self]; // update after finished editing
+	formula = [[textView string] copy]; // copy formula back
+	[notifier requestUpdate:self];			// update after finished editing
+	
+	[self setEditable:NO];
+}
+
+- (void)setEditable:(BOOL)newState
+{
+	[[self window] setMovable:newState];
+	if (newState) {
+		[[self window] setStyleMask:[[self window] styleMask] | NSClosableWindowMask | NSResizableWindowMask | NSTitledWindowMask | NSUtilityWindowMask];
+	} else	{
+		// remove closeable and resizable from the mask
+		[[self window] setStyleMask:[[self window] styleMask] & ~NSClosableWindowMask & ~NSResizableWindowMask & ~NSTitledWindowMask & ~NSUtilityWindowMask];
+	}
+	[textView setEditable:newState];
+	[textView setSelectable:newState];
+	if (!newState) {
+		[textView updateInsertionPointStateAndRestartTimer:NO]; // delete cursor (insertion Point)
+	}
 }
 
 #pragma mark NSWindow delegate methods
@@ -119,7 +136,7 @@
 	//	[[self window] setLevel:kCGDesktopIconWindowLevel];
 	[[self window] setFrame:rect display:YES animate:YES];
 	
-	[self editModeStopped];
+	[self setEditable:NO];
 	
 	[notifier requestUpdate:self];
 	
