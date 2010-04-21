@@ -34,6 +34,7 @@ static iTunesNotifier *instance = nil;
 																													name:@"com.apple.iTunes.playerInfo"
 																												object:nil];
 	userInfo = nil;
+	whitespaceCharacters = [NSCharacterSet characterSetWithCharactersInString:@" \t"];
 	return self;
 }
 
@@ -43,19 +44,8 @@ static iTunesNotifier *instance = nil;
 	userInfo = [songInfo mutableCopy];
 	
 	if ([iTunes currentTrack] != nil) {
-		// need to load lyrics extra (because not included in notification)
-		NSString *lyrics	= [[iTunes currentTrack] lyrics];
-		lyrics = (lyrics == nil) ? @"" : lyrics;
-		
-		if ([lyrics isEqualToString: @""]) { // find lyrics, if lyrics are not set
-			lyrics = [LyricsFinder findLyricsOf:[songInfo objectForKey:@"Name"]
-																			 by:[songInfo objectForKey:@"Artist"]];
-			// uncomment the following line to automatically set lyric of song, if found
-//			if (![lyrics isEqualToString:@""]) { // set lyrics of song via iTunes 
-//				[[iTunes currentTrack] setLyrics:lyrics];
-//			}
-		} 
-		[userInfo setObject:lyrics forKey:@"Lyrics"]; // add lyrics
+		[userInfo setObject:[self lyricsOfTrack:[iTunes currentTrack]] 
+								 forKey:@"Lyrics"]; // add lyrics
 	}		
 	
 	for (PanelController *controller in panelControllers) {
@@ -174,15 +164,48 @@ static iTunesNotifier *instance = nil;
 				[userInfo setObject:[NSNumber numberWithInt:[currentTrack year]]
 										 forKey:@"Year"];
 				
-				if ([currentTrack lyrics])
-					[userInfo setObject:[currentTrack lyrics] 
-											 forKey:@"Lyrics"];
+				[userInfo setObject:[self lyricsOfTrack:currentTrack]
+											forKey:@"Lyrics"];
 			}
 		} else {
 			userInfo = [NSDictionary dictionary];
 		}
 	}
 	[aController update:userInfo];
+}
+
+- (NSString *)lyricsOfTrack:(iTunesTrack *)track
+{
+	NSAssert(track != nil, @"track is nil");
+	NSString *lyrics	= [track lyrics];
+	lyrics = (lyrics == nil) ? @"" : lyrics;
+	
+	if ([lyrics isEqualToString: @""]) { // find lyrics, if lyrics are not set
+		NSString *title  = [track name];
+		NSString *artist = [track artist];
+		if (title != nil && artist != nil) {
+			lyrics = [LyricsFinder findLyricsOf:[track name]
+																			 by:[track artist]];
+			// uncomment the following line to automatically set lyric of song, if found
+			//			if (![lyrics isEqualToString:@""]) { // set lyrics of song via iTunes 
+			//				[[iTunes currentTrack] setLyrics:lyrics];
+			//			}
+		}
+	}
+	
+	if ([lyrics length] > 0) {
+		lyrics = [lyrics stringByReplacingOccurrencesOfString:@"\r\n" 
+																							 withString:@"\n"];
+		lyrics = [lyrics stringByReplacingOccurrencesOfString:@"\r" 
+																							 withString:@"\n"];
+		NSArray* lines = [lyrics componentsSeparatedByString:@"\n"];
+		NSMutableArray* newLines = [NSMutableArray arrayWithCapacity:[lines count]];
+		for (NSString* line in lines) {
+			[newLines addObject:[line stringByTrimmingCharactersInSet:whitespaceCharacters]];
+		}
+		lyrics = [newLines componentsJoinedByString:@"\n"];
+	}
+  return lyrics;
 }
 
 @end

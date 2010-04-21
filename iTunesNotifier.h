@@ -8,16 +8,19 @@
 #import <Cocoa/Cocoa.h>
 #import "AbstractNotifier.h"
 @class iTunesApplication;
+@class iTunesTrack;
 
 
 @interface iTunesNotifier : AbstractNotifier {
 	iTunesApplication *iTunes;
 	NSMutableDictionary *userInfo; // to cash song infos
+	NSCharacterSet* whitespaceCharacters;
 }
 
--(id) init;
--(void) songChanged:(NSNotification *) aNotification;
-
+- (id) init;
 + (iTunesNotifier *)instance;
+
+- (void)songChanged:(NSNotification *)aNotification;
+- (NSString *)lyricsOfTrack:(iTunesTrack *)track;
 
 @end
