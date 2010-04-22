@@ -121,18 +121,30 @@ NSString * const LiSPanelControllers = @"PanelControllers";
 - (void)switchEditMode:(id)sender
 {
 	if (inEditMode) { // switch to normal mode
+		[self setEditMode:NO];
+	} else { // switch to edit mode
+		[self	setEditMode:YES];
+	}
+}
+
+- (void)setEditMode:(BOOL)setToEditMode
+{
+	if (inEditMode == setToEditMode)
+		return;
+	if (setToEditMode) {
+		for (PanelController *controller in panelControllers) {
+			[controller editModeStarted];
+		}
+		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOnState];
+		inEditMode = YES;
+	} else {
 		for (PanelController *controller in panelControllers) {
 			[controller editModeStopped];
 		}
 		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOffState];
 		[self saveUserDefaults]; // save user defaults after finished edit mode
-	} else { // switch to edit mode
-		for (PanelController *controller in panelControllers) {
-			[controller editModeStarted];
-		}
-		[[[statusItem menu] itemWithTag:EDIT_MODE_MENU_ITEM] setState:NSOnState];
+		inEditMode = NO;
 	}
-	inEditMode = ~inEditMode;
 }
 
 #pragma mark panel management

@@ -38,6 +38,7 @@ extern NSString * const LiSPanelControllers;
 
 // trigger edit mode
 - (void)switchEditMode:(id)sender;
+- (void)setEditMode:(BOOL)setToEditMode;
 
 // panel management
 - (void)addPanel:(id)sender;

@@ -90,10 +90,13 @@
 {
 	inEditMode = FALSE;
 	
+	// set variables, so that they can be stored in user defaults
 	formula = [[textView string] copy]; // copy formula back
-	[notifier requestUpdate:self];			// update after finished editing
+	rect = [[self window] frame];
 	
 	[self setEditable:NO];
+	
+	[notifier requestUpdate:self];			// update after finished editing
 }
 
 - (void)setEditable:(BOOL)newState
@@ -124,16 +127,6 @@
 	[notifier requestUpdate:self];
 	
 	[[self window] display];
-}
-
-- (void)windowDidMove:(NSNotification *)windowDidMoveNotification
-{
-	rect = [[windowDidMoveNotification object] frame];
-}
-
-- (void)windowDidResize:(NSNotification *)windowDidResizeNotification
-{
-	rect = [[windowDidResizeNotification object] frame];
 }
 
 - (void)windowWillClose:(NSNotification *)notification

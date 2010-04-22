@@ -24,6 +24,7 @@
 
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
 {
+	[controller setEditMode:NO];
 	[controller saveUserDefaults];
 	return NSTerminateNow;
 }
